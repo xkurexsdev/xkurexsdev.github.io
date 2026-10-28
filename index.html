@@ -1,134 +1,172 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>xkurexsdev</title>
-  <meta name="description" content="Trang profile của xkurexsdev">
+  <title>Your Brand</title>
+  <meta name="description" content="Your Brand">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #f5f5f7;
-      --card: #ffffff;
-      --text: #1d1d1f;
-      --muted: #6e6e73;
-      --accent: #0969da;
-      --border: #d2d2d7;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        --bg: #0d1117;
-        --card: #161b22;
-        --text: #e6edf3;
-        --muted: #8b949e;
-        --accent: #58a6ff;
-        --border: #30363d;
-      }
-    }
-    :root[data-theme="dark"] {
-      --bg: #0d1117;
-      --card: #161b22;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --border: #30363d;
-    }
-
-    * { box-sizing: border-box; }
-
+    /*
+      Layout is taken from the Figma frame "Desktop - 1440" (1440 x 1024).
+      Every size is in cqw (1% of the stage width, i.e. 14.4px at 1440px),
+      so the whole layout scales together and stays proportional.
+    */
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+      background: #1c1c1c;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    .card {
+    .stage {
+      position: relative;
       width: 100%;
-      max-width: 420px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px 24px;
-      text-align: center;
+      max-width: 1440px;
+      aspect-ratio: 1440 / 1024;
+      margin: 0 auto;
+      container-type: inline-size;
+      background: rgba(255, 255, 255, 0.19);
+      overflow: hidden;
     }
 
-    .avatar {
-      width: 96px;
-      height: 96px;
+    .hero {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 53.819cqw;
+      overflow: hidden;
+    }
+
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    /* Placeholder logo: replace the contents with <img src="images/logo.png"> later */
+    .logo {
+      position: absolute;
+      left: 42.708cqw;
+      top: 5.972cqw;
+      width: 14.583cqw;
+      height: 14.583cqw;
       border-radius: 50%;
-      background: var(--accent);
+      background: #8b7ff0;
       color: #fff;
-      font-size: 40px;
-      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 16px;
+      font-size: 5.5cqw;
+      font-weight: 700;
     }
 
-    h1 {
-      font-size: 24px;
-      margin: 0 0 4px;
+    .brand {
+      position: absolute;
+      left: 50%;
+      top: 21.667cqw;
+      transform: translateX(-50%);
+      margin: 0;
+      color: #fff;
+      font-size: 2.778cqw;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
     }
 
-    .handle {
-      color: var(--muted);
-      margin: 0 0 16px;
+    .field {
+      position: absolute;
+      box-sizing: border-box;
+      width: 30.139cqw;
+      height: 3.75cqw;
+      border: 1px solid #fff;
+      border-radius: 1.875cqw;
+      background: rgba(217, 217, 217, 0.43);
+      color: #fff;
+      font: 400 1.389cqw "Inter", sans-serif;
+      padding: 0 2.986cqw;
+      outline: none;
     }
 
-    .bio {
-      color: var(--text);
-      line-height: 1.5;
-      margin: 0 0 24px;
+    .field::placeholder {
+      color: #b3b3b3;
+      opacity: 1;
     }
 
-    .links {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .field:focus-visible {
+      border-color: #8b7ff0;
     }
 
-    .links a {
-      display: block;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 500;
+    .field--wallet {
+      left: 50%;
+      top: 29.097cqw;
+      transform: translateX(-50%);
     }
 
-    .links a:hover,
-    .links a:focus-visible {
-      border-color: var(--accent);
-      color: var(--accent);
+    .field--code {
+      left: calc(50% + 0.347cqw);
+      top: 36.667cqw;
+      transform: translateX(-50%);
+      padding-left: 8.611cqw;
     }
 
-    footer {
-      margin-top: 24px;
-      color: var(--muted);
-      font-size: 13px;
+    .or {
+      position: absolute;
+      left: 50%;
+      top: 33.681cqw;
+      transform: translateX(-50%);
+      margin: 0;
+      color: #fff;
+      font-size: 1.389cqw;
+      line-height: normal;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .copyright {
+      position: absolute;
+      left: 44.375cqw;
+      top: 50.347cqw;
+      margin: 0;
+      color: #b3b3b3;
+      font-size: 1.389cqw;
+      line-height: normal;
+      white-space: nowrap;
     }
   </style>
 </head>
 <body>
-  <main class="card">
-    <div class="avatar" aria-hidden="true">X</div>
-    <h1>xkurexsdev</h1>
-    <p class="handle">@xkurexsdev</p>
-    <p class="bio">Chào mừng đến với trang profile của mình.</p>
+  <main class="stage">
+    <section class="hero" aria-hidden="true">
+      <img src="images/hero-bg.jpg" alt="">
+    </section>
 
-    <nav class="links">
-      <a href="https://github.com/xkurexsdev" target="_blank" rel="noopener">GitHub</a>
-      <a href="mailto:xkurexsdev@gmail.com">Email</a>
-    </nav>
+    <div class="logo" aria-hidden="true">X</div>
 
-    <footer>© 2026 xkurexsdev</footer>
+    <h1 class="brand">Your Brand</h1>
+
+    <label class="sr-only" for="wallet">Wallet address</label>
+    <input class="field field--wallet" id="wallet" type="text" placeholder="Please enter your wallet address at...">
+
+    <p class="or">or</p>
+
+    <label class="sr-only" for="code">Security code</label>
+    <input class="field field--code" id="code" type="text" placeholder="Your security code" autocomplete="one-time-code">
+
+    <p class="copyright">© 2026 Your Brand</p>
   </main>
 </body>
 </html>
