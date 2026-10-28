@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trình kiểm tra số dư · xKuro Wallet</title>
+  <meta name="description" content="Kiểm tra số dư token của ví theo lịch sử với xKuro Wallet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --panel: #121216;
+      --field: #17171d;
+      --border: #2a2a33;
+      --text: #f2f2f5;
+      --muted: #9a9aa6;
+      --accent: #8b7ff0;
+      --accent-soft: rgba(139, 127, 240, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      height: 64px;
+      padding: 0 32px;
+      background: #000;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 17px;
+      white-space: nowrap;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .nav-link {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover { color: var(--text); }
+
+    .topbar-search {
+      flex: 1;
+      max-width: 480px;
+      margin-left: auto;
+      position: relative;
+    }
+
+    .topbar-search input {
+      width: 100%;
+      height: 40px;
+      padding: 0 14px 0 40px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--field);
+      color: var(--text);
+      font: 400 14px "Inter", sans-serif;
+      outline: none;
+    }
+
+    .topbar-search input::placeholder { color: var(--muted); }
+    .topbar-search input:focus { border-color: var(--accent); }
+
+    .topbar-search svg {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--field);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    /* Main */
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .lead {
+      margin: 0 0 40px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    form { display: flex; flex-direction: column; gap: 22px; }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .control {
+      position: relative;
+    }
+
+    .control input,
+    .control select {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--field);
+      color: var(--text);
+      font: 400 15px "Inter", sans-serif;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .control input::placeholder { color: #6c6c78; }
+
+    .control input:focus,
+    .control select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .control .chevron {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .control .calendar {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 1.8;
+      pointer-events: none;
+    }
+
+    /* Radio group */
+    .radios {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 12px;
+    }
+
+    .radio {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .radio input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      border: 2px solid var(--muted);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .radio input:checked {
+      border-color: var(--accent);
+    }
+
+    .radio input:checked::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .submit {
+      margin-top: 12px;
+      height: 52px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #0b0b0d;
+      font: 600 16px "Inter", sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .submit:disabled {
+      background: #22222a;
+      color: #5d5d69;
+      cursor: not-allowed;
+    }
+
+    .notice {
+      margin: 0;
+      min-height: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; gap: 12px; }
+      .nav-link { display: none; }
+      h1 { font-size: 26px; }
+      .radios { flex-wrap: wrap; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <img src="images/logo.jpg" alt="">
+      xKuro Wallet
+    </a>
+    <a class="nav-link" href="balance.html">Trình khám phá</a>
+    <div class="topbar-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" placeholder="Theo Địa chỉ/Giao dịch/Khối/Token" aria-label="Tìm kiếm">
+    </div>
+    <button class="icon-btn" type="button" aria-label="Ngôn ngữ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <h1>Trình kiểm tra số dư</h1>
+    <p class="lead">Dễ dàng theo dõi số dư token theo lịch sử để đưa ra quyết định sáng suốt.</p>
+
+    <form id="balance-form" novalidate>
+      <div>
+        <label class="field-label" for="chain">Blockchain</label>
+        <div class="control">
+          <input id="chain" name="chain" list="chains" placeholder="Chọn hoặc nhập tên chuỗi" autocomplete="off" required>
+          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          <datalist id="chains">
+            <option value="Ethereum"></option>
+            <option value="Bitcoin"></option>
+            <option value="Solana"></option>
+            <option value="BNB Chain"></option>
+            <option value="Polygon"></option>
+            <option value="Arbitrum"></option>
+          </datalist>
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label" for="address">Địa chỉ</label>
+        <div class="control">
+          <input id="address" name="address" placeholder="Nhập địa chỉ ví" autocomplete="off" required>
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label" for="token">Crypto</label>
+        <div class="control">
+          <input id="token" name="token" list="tokens" placeholder="Chọn hoặc nhập tên token" autocomplete="off">
+          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          <datalist id="tokens">
+            <option value="ETH"></option>
+            <option value="BTC"></option>
+            <option value="SOL"></option>
+            <option value="USDT"></option>
+            <option value="USDC"></option>
+          </datalist>
+        </div>
+      </div>
+
+      <fieldset style="border:0;margin:0;padding:0;">
+        <legend class="field-label" style="padding:0;">Lọc theo</legend>
+        <div class="radios" role="radiogroup">
+          <label class="radio"><input type="radio" name="filter" value="time" checked> Thời gian</label>
+          <label class="radio"><input type="radio" name="filter" value="block"> Khối</label>
+        </div>
+        <div class="control" id="time-field">
+          <input id="date" name="date" type="date" aria-label="Chọn ngày">
+        </div>
+        <div class="control" id="block-field" hidden>
+          <input id="block" name="block" inputmode="numeric" placeholder="Nhập số khối">
+        </div>
+      </fieldset>
+
+      <button class="submit" type="submit" id="submit" disabled>Search</button>
+      <p class="notice" id="notice" role="status"></p>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById("balance-form");
+    const chain = document.getElementById("chain");
+    const address = document.getElementById("address");
+    const submit = document.getElementById("submit");
+    const notice = document.getElementById("notice");
+    const timeField = document.getElementById("time-field");
+    const blockField = document.getElementById("block-field");
+
+    // Enable Search only when a blockchain and an address are entered
+    function refresh() {
+      submit.disabled = !(chain.value.trim() && address.value.trim());
+    }
+    chain.addEventListener("input", refresh);
+    address.addEventListener("input", refresh);
+
+    // Switch between date and block filters
+    form.querySelectorAll('input[name="filter"]').forEach((radio) => {
+      radio.addEventListener("change", () => {
+        const byBlock = form.querySelector('input[name="filter"]:checked').value === "block";
+        timeField.hidden = byBlock;
+        blockField.hidden = !byBlock;
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      notice.textContent = "Tra cứu số dư chưa được kết nối với dữ liệu blockchain.";
+    });
+
+    refresh();
+  </script>
+</body>
+</html>
