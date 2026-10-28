@@ -241,6 +241,18 @@
       background: var(--accent);
     }
 
+    .demo {
+      align-self: flex-start;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--accent);
+      font: 500 14px "Inter", sans-serif;
+      cursor: pointer;
+    }
+
+    .demo:hover { text-decoration: underline; }
+
     .submit {
       margin-top: 12px;
       height: 52px;
@@ -324,6 +336,7 @@
           <input id="token" name="token" list="tokens" placeholder="Chọn hoặc nhập tên token" autocomplete="off">
           <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
           <datalist id="tokens">
+            <option value="Ethereum"></option>
             <option value="ETH"></option>
             <option value="BTC"></option>
             <option value="SOL"></option>
@@ -347,6 +360,7 @@
         </div>
       </fieldset>
 
+      <button class="demo" type="button" id="demo">Điền dữ liệu mẫu</button>
       <button class="submit" type="submit" id="submit" disabled>Search</button>
       <p class="notice" id="notice" role="status"></p>
     </form>
@@ -361,28 +375,78 @@
     const timeField = document.getElementById("time-field");
     const blockField = document.getElementById("block-field");
 
-    // Enable Search only when a blockchain and an address are entered
-    function refresh() {
-      submit.disabled = !(chain.value.trim() && address.value.trim());
+    const token = document.getElementById("token");
+    const date = document.getElementById("date");
+    const block = document.getElementById("block");
+    const demoBtn = document.getElementById("demo");
+    const EVM_CHAINS = ["ethereum", "bnb chain", "polygon", "arbitrum"];
+
+    function currentFilter() {
+      return form.querySelector('input[name="filter"]:checked').value;
     }
-    chain.addEventListener("input", refresh);
-    address.addEventListener("input", refresh);
+
+    // Enable Search only when every required field is filled
+    function refresh() {
+      const filterValue = currentFilter() === "block" ? block.value.trim() : date.value;
+      submit.disabled = !(chain.value.trim() && address.value.trim() && token.value.trim() && filterValue);
+    }
+    [chain, address, token, date, block].forEach((input) => {
+      input.addEventListener("input", refresh);
+      input.addEventListener("change", refresh);
+    });
 
     // Switch between date and block filters
+    function syncFilter() {
+      const byBlock = currentFilter() === "block";
+      timeField.hidden = byBlock;
+      blockField.hidden = !byBlock;
+      refresh();
+    }
     form.querySelectorAll('input[name="filter"]').forEach((radio) => {
-      radio.addEventListener("change", () => {
-        const byBlock = form.querySelector('input[name="filter"]:checked').value === "block";
-        timeField.hidden = byBlock;
-        blockField.hidden = !byBlock;
-      });
+      radio.addEventListener("change", syncFilter);
+    });
+
+    // Sample data for trying the flow end to end
+    demoBtn.addEventListener("click", () => {
+      chain.value = "Ethereum";
+      address.value = "0x8dfc8fadd542bcf3b5168112e803d0b0c1e1f111";
+      token.value = "Ethereum";
+      form.querySelector('input[name="filter"][value="block"]').checked = true;
+      block.value = "24000000";
+      notice.textContent = "";
+      syncFilter();
     });
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      notice.textContent = "Tra cứu số dư chưa được kết nối với dữ liệu blockchain.";
+      const data = {
+        chain: chain.value.trim(),
+        address: address.value.trim(),
+        token: token.value.trim(),
+        filter: currentFilter(),
+        date: date.value,
+        block: block.value.trim(),
+      };
+
+      if (EVM_CHAINS.includes(data.chain.toLowerCase()) && !/^0x[0-9a-fA-F]{40}$/.test(data.address)) {
+        notice.textContent = "Địa chỉ ví không hợp lệ: cần bắt đầu bằng 0x và có 40 ký tự hex.";
+        return;
+      }
+      if (data.filter === "block" && !/^\d+$/.test(data.block)) {
+        notice.textContent = "Số khối chỉ gồm chữ số.";
+        return;
+      }
+
+      try {
+        sessionStorage.setItem("xkuro-query", JSON.stringify(data));
+      } catch (e) {
+        notice.textContent = "Trình duyệt không cho lưu dữ liệu tạm, vui lòng bật lại rồi thử lại.";
+        return;
+      }
+      window.location.href = "result.html";
     });
 
-    refresh();
+    syncFilter();
   </script>
 </body>
 </html>
