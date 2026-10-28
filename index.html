@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Your Brand</title>
-  <meta name="description" content="Your Brand">
+  <title>xKuro Wallet</title>
+  <meta name="description" content="xKuro Wallet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
@@ -50,7 +50,6 @@
       pointer-events: none;
     }
 
-    /* Placeholder logo: replace the contents with <img src="images/logo.png"> later */
     .logo {
       position: absolute;
       left: 42.708cqw;
@@ -58,19 +57,14 @@
       width: 14.583cqw;
       height: 14.583cqw;
       border-radius: 50%;
-      background: #8b7ff0;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5.5cqw;
-      font-weight: 700;
+      object-fit: cover;
     }
 
     .brand {
       position: absolute;
-      left: 38.75cqw;
+      left: 50%;
       top: 21.667cqw;
+      transform: translateX(-50%);
       margin: 0;
       color: #fff;
       font-size: 2.778cqw;
@@ -153,9 +147,9 @@
       <img src="images/hero-bg.jpg" alt="">
     </section>
 
-    <div class="logo" aria-hidden="true">X</div>
+    <img class="logo" src="images/logo.jpg" alt="xKuro Wallet logo" width="210" height="210">
 
-    <h1 class="brand">Your Brand</h1>
+    <h1 class="brand">xKuro Wallet</h1>
 
     <label class="sr-only" for="wallet">Wallet address</label>
     <input class="field field--wallet" id="wallet" type="text" placeholder="Please enter your wallet address at...">
@@ -165,7 +159,7 @@
     <label class="sr-only" for="code">Security code</label>
     <input class="field field--code" id="code" type="text" placeholder="Your security code" autocomplete="one-time-code">
 
-    <p class="copyright">© 2026 Your Brand</p>
+    <p class="copyright">© 2026 xKuro Wallet</p>
   </main>
 </body>
 </html>
