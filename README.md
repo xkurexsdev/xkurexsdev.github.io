@@ -16,8 +16,6 @@ Giao diện tham khảo cho trang web **xKuro Wallet**, viết bằng HTML/CSS/J
 - **Trình kiểm tra số dư** (`xkurochianlink/balance.html`): form gồm Blockchain, Địa chỉ ví, Crypto và bộ lọc theo thời gian hoặc theo khối. Nút Search chỉ bật khi đã điền đủ các mục. Với chuỗi EVM (Ethereum, BNB Chain, Polygon, Arbitrum), địa chỉ phải đúng định dạng `0x` kèm 40 ký tự hex.
 - **Kết quả tra cứu** (`xkurochianlink/result.html`): trang đích sau khi gửi form, hiện lại thông tin đã nhập, số dư và lịch sử số dư.
 
-Trên trang kiểm tra số dư có nút **"Điền dữ liệu mẫu"** để thử nhanh toàn bộ luồng.
-
 ## Lưu ý
 
 - Số dư và lịch sử trên trang kết quả là **dữ liệu minh họa**, được tạo từ thông tin bạn nhập. Dự án **chưa kết nối với dữ liệu blockchain thật**.

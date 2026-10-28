@@ -241,18 +241,6 @@
       background: var(--accent);
     }
 
-    .demo {
-      align-self: flex-start;
-      padding: 0;
-      border: 0;
-      background: none;
-      color: var(--accent);
-      font: 500 14px "Inter", sans-serif;
-      cursor: pointer;
-    }
-
-    .demo:hover { text-decoration: underline; }
-
     .submit {
       margin-top: 12px;
       height: 52px;
@@ -360,7 +348,6 @@
         </div>
       </fieldset>
 
-      <button class="demo" type="button" id="demo">Điền dữ liệu mẫu</button>
       <button class="submit" type="submit" id="submit" disabled>Search</button>
       <p class="notice" id="notice" role="status"></p>
     </form>
@@ -378,7 +365,6 @@
     const token = document.getElementById("token");
     const date = document.getElementById("date");
     const block = document.getElementById("block");
-    const demoBtn = document.getElementById("demo");
     const EVM_CHAINS = ["ethereum", "bnb chain", "polygon", "arbitrum"];
 
     function currentFilter() {
@@ -404,17 +390,6 @@
     }
     form.querySelectorAll('input[name="filter"]').forEach((radio) => {
       radio.addEventListener("change", syncFilter);
-    });
-
-    // Sample data for trying the flow end to end
-    demoBtn.addEventListener("click", () => {
-      chain.value = "Ethereum";
-      address.value = "0x8dfc8fadd542bcf3b5168112e803d0b0c1e1f111";
-      token.value = "Ethereum";
-      form.querySelector('input[name="filter"][value="block"]').checked = true;
-      block.value = "25924000";
-      notice.textContent = "";
-      syncFilter();
     });
 
     form.addEventListener("submit", (event) => {
